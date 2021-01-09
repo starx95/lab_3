@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -160,11 +161,17 @@ class _homepageState extends State<homepage> {
           tappedPoint.latitude, tappedPoint.longitude);
       latitude = tappedPoint.latitude;
       longitude = tappedPoint.longitude;
+     
+  final coordinates = new Coordinates(latitude, longitude);
+  var addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+
+  var first = addresses.first;
+
       Placemark place = p[0];
 
       setState(() {
         _currentAddress =
-            "${place.locality}, ${place.postalCode}, ${place.country}";
+            "${first.addressLine}";
       });
     } catch (e) {
       print(e);
